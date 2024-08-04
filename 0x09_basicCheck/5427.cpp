@@ -4,10 +4,33 @@
 using namespace std;
 #define X first
 #define Y second
-int F[1002][1002];
-int S[1002][1002];
+int F[1005][1005];
+int S[1005][1005];
 int dx[4] = {0, 0, 1, -1};
 int dy[4] = {1, -1, 0, 0};
+int M, N;
+
+void print()
+{
+    cout << "---------S---------\n";
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << S[i][j] << ' ';
+        }
+        cout << "\n";
+    }
+    cout << "---------F---------\n";
+    for (int i = 0; i < N; i++)
+    {
+        for (int j = 0; j < M; j++)
+        {
+            cout << F[i][j] << ' ';
+        }
+        cout << "\n";
+    }
+}
 int main()
 {
     ios::sync_with_stdio(0);
@@ -16,7 +39,7 @@ int main()
     cin >> T;
     while (T--)
     {
-        int M, N;
+
         cin >> M >> N;
         queue<pair<int, int>> Q;
         pair<int, int> sang;
@@ -89,13 +112,19 @@ int main()
 
                 if (nx < 0 || ny < 0 || nx >= N || ny >= M)
                     continue;
-                if (F[nx][ny] == -1 && F[nx][ny] <= S[cur.X][cur.Y] + 1)
+                if (F[nx][ny] == 0)
+                {
+                    //
+                }
+                else if (F[nx][ny] <= S[cur.X][cur.Y] + 1)
+                {
                     continue;
-
+                }
                 if (S[nx][ny] > 0 || S[nx][ny] == -1)
                     continue;
                 if (nx == 0 || ny == 0 || nx == N - 1 || ny == M - 1)
                 {
+                    S[nx][ny] = -2;
                     result = S[cur.X][cur.Y] + 1;
                     escape = true;
                     break;
@@ -105,6 +134,7 @@ int main()
                 Q.push({nx, ny});
             }
         }
+        // print();
         if (escape)
         {
             cout << result << "\n";
@@ -113,11 +143,5 @@ int main()
         {
             cout << "IMPOSSIBLE" << "\n";
         }
-        for (int i = 0; i < N; i++)
-            for (int j = 0; j < M; j++)
-            {
-                F[i][j] = 0;
-                S[i][j] = 0;
-            }
     }
 }
