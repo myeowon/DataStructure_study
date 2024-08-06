@@ -12,33 +12,42 @@ int dy[4] = {1, -1, 0, 0};
 int N;
 queue<pair<int, int>> Q;
 
-int main()
+void resetVis()
 {
-    cin >> N;
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            vis[i][j] = 0;
+}
+void printVis()
+{
     for (int i = 0; i < N; i++)
     {
         for (int j = 0; j < N; j++)
         {
-            int temp, input;
-            cin >> temp;
-            if (temp > N)
-                input = 1;
-            else
-                input = 0;
-            board[i][j] = input;
+            cout << vis[i][j] << ' ';
         }
+        cout << '\n';
     }
-    int result = 0;
-    for (int n = 0; n <= N; n++)
+}
+
+int main()
+{
+    cin >> N;
+    for (int i = 0; i < N; i++)
+        for (int j = 0; j < N; j++)
+            cin >> board[i][j];
+
+    int max = 1;
+    for (int n = 0; n <= 100; n++)
     {
-        int area;
+        int area = 0; // 높이가 n일때 영역 개수
         for (int i = 0; i < N; i++)
         {
             for (int j = 0; j < N; j++)
             {
-                if (board[i][j] == 0 || vis[i][j] == 1)
+                if (board[i][j] <= n || vis[i][j] == 1)
                     continue;
-                int area = 0;
+                area++;
 
                 Q.push({i, j});
                 vis[i][j] = 1;
@@ -51,9 +60,9 @@ int main()
                     {
                         int nx = cur.X + dx[dir];
                         int ny = cur.Y + dy[dir];
-                        if (nx < 0 || ny < 0 || nx >= n || ny >= n)
+                        if (nx < 0 || ny < 0 || nx >= N || ny >= N)
                             continue;
-                        if (board[nx][ny] == 0 || vis[nx][ny] == 1)
+                        if (board[nx][ny] <= n || vis[nx][ny] == 1)
                             continue;
                         Q.push({nx, ny});
                         vis[nx][ny] = 1;
@@ -61,8 +70,11 @@ int main()
                 }
             }
         }
-        if (area > result)
-            result = area;
+        if (area > max)
+            max = area;
+
+        // printVis();
+        resetVis();
     }
-    cout << result;
+    cout << max;
 }
